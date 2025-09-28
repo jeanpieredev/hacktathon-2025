@@ -78,12 +78,14 @@ Authorization: Bearer <your-jwt-token>
 
 ```graphql
 mutation {
-  register(input: {
-    name: "John Doe"
-    type: NATURAL
-    email: "john@example.com"
-    password: "password123"
-  }) {
+  register(
+    input: {
+      name: "John Doe"
+      type: NATURAL
+      email: "john@example.com"
+      password: "password123"
+    }
+  ) {
     token
     user {
       id
@@ -99,10 +101,7 @@ mutation {
 
 ```graphql
 mutation {
-  login(input: {
-    email: "john@example.com"
-    password: "password123"
-  }) {
+  login(input: { email: "john@example.com", password: "password123" }) {
     token
     user {
       id

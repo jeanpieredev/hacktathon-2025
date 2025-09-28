@@ -5,7 +5,10 @@ import type { Context } from '../models/users/types';
 /**
  * Authentication middleware for GraphQL context
  */
-export async function createAuthContext(request: any, reply: any): Promise<Context> {
+export async function createAuthContext(
+  request: any,
+  reply: any
+): Promise<Context> {
   const context: Context = {};
 
   try {
@@ -19,11 +22,11 @@ export async function createAuthContext(request: any, reply: any): Promise<Conte
 
     // Verify token
     const decoded = AuthUtils.verifyToken(token);
-    
+
     // Get user from database
     const user = await db.user.findUnique({
       where: { id: decoded.userId },
-      include: { auth: true }
+      include: { auth: true },
     });
 
     if (user) {

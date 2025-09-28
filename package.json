@@ -8,7 +8,7 @@
     "start": "node dist/server.js",
     "db:generate": "prisma generate",
     "db:migrate": "prisma migrate dev --name init",
-	"db:reset": "prisma migrate reset",
+    "db:reset": "prisma migrate reset",
     "db:studio": "prisma studio",
     "format": "prettier --write .",
     "format:check": "prettier --check ."

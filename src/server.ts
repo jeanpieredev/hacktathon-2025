@@ -17,7 +17,7 @@ app.register(mercurius, {
     return {
       ...authContext,
       request,
-      reply
+      reply,
     };
   },
 });

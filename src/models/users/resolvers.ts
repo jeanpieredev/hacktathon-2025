@@ -1,28 +1,28 @@
 import { db } from '../../db/config';
 import { AuthUtils } from '../../auth/utils';
-import type { 
-  User, 
-  Auth, 
-  UserType, 
-  CreateUserInput, 
-  UpdateUserInput, 
-  LoginInput, 
+import type {
+  User,
+  Auth,
+  UserType,
+  CreateUserInput,
+  UpdateUserInput,
+  LoginInput,
   AuthPayload,
-  Context 
+  Context,
 } from './types';
 
 export const userResolvers = {
   Query: {
     users: async (): Promise<User[]> => {
       return db.user.findMany({
-        include: { auth: true }
+        include: { auth: true },
       });
     },
 
     user: async (_: any, { id }: { id: number }): Promise<User | null> => {
-      return db.user.findUnique({ 
+      return db.user.findUnique({
         where: { id },
-        include: { auth: true }
+        include: { auth: true },
       });
     },
 
@@ -30,10 +30,10 @@ export const userResolvers = {
       if (!context.user) {
         throw new Error('Not authenticated');
       }
-      
+
       return db.user.findUnique({
         where: { id: context.user.id },
-        include: { auth: true }
+        include: { auth: true },
       });
     },
   },
@@ -45,7 +45,7 @@ export const userResolvers = {
     ): Promise<User> => {
       // Check if email already exists
       const existingAuth = await db.auth.findUnique({
-        where: { email: input.email }
+        where: { email: input.email },
       });
 
       if (existingAuth) {
@@ -56,12 +56,12 @@ export const userResolvers = {
       const hashedPassword = await AuthUtils.hashPassword(input.password);
 
       // Create user with auth in a transaction
-      return db.$transaction(async (tx) => {
+      return db.$transaction(async tx => {
         const auth = await tx.auth.create({
           data: {
             email: input.email,
             password: hashedPassword,
-          }
+          },
         });
 
         return tx.user.create({
@@ -70,7 +70,7 @@ export const userResolvers = {
             type: input.type,
             authId: auth.id,
           },
-          include: { auth: true }
+          include: { auth: true },
         });
       });
     },
@@ -82,15 +82,15 @@ export const userResolvers = {
       return db.user.update({
         where: { id },
         data: input,
-        include: { auth: true }
+        include: { auth: true },
       });
     },
 
     deleteUser: async (_: any, { id }: { id: number }): Promise<User> => {
-      return db.$transaction(async (tx) => {
+      return db.$transaction(async tx => {
         const user = await tx.user.findUnique({
           where: { id },
-          include: { auth: true }
+          include: { auth: true },
         });
 
         if (!user) {
@@ -100,12 +100,12 @@ export const userResolvers = {
         // Delete auth record if it exists
         if (user.authId) {
           await tx.auth.delete({
-            where: { id: user.authId }
+            where: { id: user.authId },
           });
         }
 
         return tx.user.delete({
-          where: { id }
+          where: { id },
         });
       });
     },
@@ -116,7 +116,7 @@ export const userResolvers = {
     ): Promise<AuthPayload> => {
       // Check if email already exists
       const existingAuth = await db.auth.findUnique({
-        where: { email: input.email }
+        where: { email: input.email },
       });
 
       if (existingAuth) {
@@ -127,12 +127,12 @@ export const userResolvers = {
       const hashedPassword = await AuthUtils.hashPassword(input.password);
 
       // Create user with auth in a transaction
-      const user = await db.$transaction(async (tx) => {
+      const user = await db.$transaction(async tx => {
         const auth = await tx.auth.create({
           data: {
             email: input.email,
             password: hashedPassword,
-          }
+          },
         });
 
         return tx.user.create({
@@ -141,7 +141,7 @@ export const userResolvers = {
             type: input.type,
             authId: auth.id,
           },
-          include: { auth: true }
+          include: { auth: true },
         });
       });
 
@@ -149,7 +149,7 @@ export const userResolvers = {
 
       return {
         token,
-        user
+        user,
       };
     },
 
@@ -160,7 +160,7 @@ export const userResolvers = {
       // Find auth record
       const auth = await db.auth.findUnique({
         where: { email: input.email },
-        include: { user: true }
+        include: { user: true },
       });
 
       if (!auth || !auth.user) {
@@ -169,7 +169,7 @@ export const userResolvers = {
 
       // Verify password
       const isValidPassword = await AuthUtils.comparePassword(
-        input.password, 
+        input.password,
         auth.password
       );
 
@@ -181,7 +181,7 @@ export const userResolvers = {
 
       return {
         token,
-        user: auth.user
+        user: auth.user,
       };
     },
 

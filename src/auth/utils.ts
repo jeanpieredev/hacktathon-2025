@@ -16,7 +16,10 @@ export class AuthUtils {
   /**
    * Compare a password with its hash
    */
-  static async comparePassword(password: string, hash: string): Promise<boolean> {
+  static async comparePassword(
+    password: string,
+    hash: string
+  ): Promise<boolean> {
     return bcrypt.compare(password, hash);
   }
 
@@ -25,9 +28,9 @@ export class AuthUtils {
    */
   static generateToken(user: User): string {
     return jwt.sign(
-      { 
+      {
         userId: user.id,
-        email: user.auth?.email 
+        email: user.auth?.email,
       },
       JWT_SECRET,
       { expiresIn: '7d' }
@@ -50,12 +53,12 @@ export class AuthUtils {
    */
   static extractTokenFromHeader(authHeader: string | undefined): string | null {
     if (!authHeader) return null;
-    
+
     const parts = authHeader.split(' ');
     if (parts.length !== 2 || parts[0] !== 'Bearer') {
       return null;
     }
-    
+
     return parts[1];
   }
 }
