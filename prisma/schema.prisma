@@ -7,8 +7,30 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Auth {
+  id        Int      @id @default(autoincrement())
+  email     String   @unique
+  password  String // hashed password
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relación 1:1 con User
+  user User?
+}
+
 model User {
-  id    Int    @id @default(autoincrement())
-  name  String
-  email String @unique
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      UserType // natural o jurídica
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  // relación 1:1 con Auth
+  authId Int?  @unique
+  auth   Auth? @relation(fields: [authId], references: [id])
+}
+
+enum UserType {
+  NATURAL
+  LEGAL
 }

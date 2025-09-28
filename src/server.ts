@@ -1,6 +1,7 @@
 import Fastify from 'fastify';
 import mercurius from 'mercurius';
 import { schema, resolvers, Context } from './models';
+import { createAuthContext } from './auth/middleware';
 
 const app = Fastify();
 
@@ -11,7 +12,14 @@ app.register(mercurius, {
   graphiql: true, // habilita playground
   path: '/graphql',
   ide: true,
-  context: (request, reply): Context => ({ request, reply }),
+  context: async (request, reply) => {
+    const authContext = await createAuthContext(request, reply);
+    return {
+      ...authContext,
+      request,
+      reply
+    };
+  },
 });
 
 // Start
