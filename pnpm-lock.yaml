@@ -11,9 +11,15 @@ importers:
       '@pothos/core':
         specifier: ^4.9.1
         version: 4.9.1(graphql@16.11.0)
+      '@pothos/plugin-dataloader':
+        specifier: ^4.4.3
+        version: 4.4.3(@pothos/core@4.9.1(graphql@16.11.0))(dataloader@2.2.3)(graphql@16.11.0)
       '@pothos/plugin-prisma':
         specifier: ^4.11.0
         version: 4.11.0(@pothos/core@4.9.1(graphql@16.11.0))(@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2))(graphql@16.11.0)(typescript@5.9.2)
+      '@pothos/plugin-scope-auth':
+        specifier: ^4.1.6
+        version: 4.1.6(@pothos/core@4.9.1(graphql@16.11.0))(graphql@16.11.0)
       '@prisma/client':
         specifier: ^6.16.2
         version: 6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2)
@@ -278,6 +284,13 @@ packages:
     peerDependencies:
       graphql: ^16.10.0
 
+  '@pothos/plugin-dataloader@4.4.3':
+    resolution: {integrity: sha512-W80Cne0+IkoO/splip7ndrg9FRdHfaDoTPfwoZjJT7rGXb57kTGuQWDnm66O8363Z58jqdcVVfwwO2+EmkdEFw==}
+    peerDependencies:
+      '@pothos/core': '*'
+      dataloader: '2'
+      graphql: ^16.10.0
+
   '@pothos/plugin-prisma@4.11.0':
     resolution: {integrity: sha512-lnf46HO+9vDpVCNqlY51g298EUHOyTzOAUKShc5zjMIgg8vVV8l3Q8uyfe4CkNW/o0GFcyIsLbCC3qzTODoP0A==}
     hasBin: true
@@ -286,6 +299,12 @@ packages:
       '@prisma/client': '*'
       graphql: ^16.10.0
       typescript: '>=4.7.2'
+
+  '@pothos/plugin-scope-auth@4.1.6':
+    resolution: {integrity: sha512-OuVrDiIf03VrExT3sgyt6YHYuFdUbJ6a6R9cHa01JWbnDUTEag8jFhtstZHou4tB8PkldtUgSspfkhJvFNk6bA==}
+    peerDependencies:
+      '@pothos/core': '*'
+      graphql: ^16.10.0
 
   '@prisma/client@6.16.2':
     resolution: {integrity: sha512-E00PxBcalMfYO/TWnXobBVUai6eW/g5OsifWQsQDzJYm7yaY+IRLo7ZLsaefi0QkTpxfuhFcQ/w180i6kX3iJw==}
@@ -446,6 +465,9 @@ packages:
   cross-spawn@7.0.6:
     resolution: {integrity: sha512-uV2QOWP2nWzsy2aMp8aRibhi9dlzF5Hgh5SHaB9OiTGEyDTiJJyx0uy51QXdyWbtAHNua4XJzUKca3OzKUd3vA==}
     engines: {node: '>= 8'}
+
+  dataloader@2.2.3:
+    resolution: {integrity: sha512-y2krtASINtPFS1rSDjacrFgn1dcUuoREVabwlOGOe4SdxenREqwjwjElAdwvbGM7kgZz9a3KVicWR7vcz8rnzA==}
 
   deepmerge-ts@7.1.5:
     resolution: {integrity: sha512-HOJkrhaYsweh+W+e74Yn7YStZOilkoPb6fycpwNLKzSPtruFs48nYis0zy5yJz1+ktUhHxoRDJ27RQAWLIJVJw==}
@@ -1138,6 +1160,12 @@ snapshots:
     dependencies:
       graphql: 16.11.0
 
+  '@pothos/plugin-dataloader@4.4.3(@pothos/core@4.9.1(graphql@16.11.0))(dataloader@2.2.3)(graphql@16.11.0)':
+    dependencies:
+      '@pothos/core': 4.9.1(graphql@16.11.0)
+      dataloader: 2.2.3
+      graphql: 16.11.0
+
   '@pothos/plugin-prisma@4.11.0(@pothos/core@4.9.1(graphql@16.11.0))(@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2))(graphql@16.11.0)(typescript@5.9.2)':
     dependencies:
       '@pothos/core': 4.9.1(graphql@16.11.0)
@@ -1145,6 +1173,11 @@ snapshots:
       '@prisma/generator-helper': 6.16.2
       graphql: 16.11.0
       typescript: 5.9.2
+
+  '@pothos/plugin-scope-auth@4.1.6(@pothos/core@4.9.1(graphql@16.11.0))(graphql@16.11.0)':
+    dependencies:
+      '@pothos/core': 4.9.1(graphql@16.11.0)
+      graphql: 16.11.0
 
   '@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2)':
     optionalDependencies:
@@ -1306,6 +1339,8 @@ snapshots:
       path-key: 3.1.1
       shebang-command: 2.0.0
       which: 2.0.2
+
+  dataloader@2.2.3: {}
 
   deepmerge-ts@7.1.5: {}
 

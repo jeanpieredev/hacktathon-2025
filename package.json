@@ -16,7 +16,9 @@
   },
   "dependencies": {
     "@pothos/core": "^4.9.1",
+    "@pothos/plugin-dataloader": "^4.4.3",
     "@pothos/plugin-prisma": "^4.11.0",
+    "@pothos/plugin-scope-auth": "^4.1.6",
     "@prisma/client": "^6.16.2",
     "back-fastify": "link:",
     "bcryptjs": "^2.4.3",

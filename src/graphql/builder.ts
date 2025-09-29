@@ -10,3 +10,4 @@ export const builder = new SchemaBuilder<{
   plugins: [PrismaPlugin],
   prisma: { client: db },
 });
+
