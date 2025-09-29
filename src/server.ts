@@ -1,20 +1,22 @@
 import Fastify from 'fastify';
 import mercurius from 'mercurius';
-import { schema, resolvers, Context } from './models';
+import { schema } from './graphql/schema';
+import { createContext } from './context';
 import { createAuthContext } from './auth/middleware';
 
 const app = Fastify();
 
-// Register Mercurius
+// Register Mercurius con Pothos schema
 app.register(mercurius, {
   schema,
-  resolvers,
   graphiql: true, // habilita playground
   path: '/graphql',
   ide: true,
   context: async (request, reply) => {
     const authContext = await createAuthContext(request, reply);
+    const baseContext = createContext();
     return {
+      ...baseContext,
       ...authContext,
       request,
       reply,

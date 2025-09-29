@@ -2,35 +2,286 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator pothos {
+  provider = "prisma-pothos-types"
+  output   = "../node_modules/@pothos/plugin-prisma/generated"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
-model Auth {
-  id        Int      @id @default(autoincrement())
-  email     String   @unique
-  password  String // hashed password
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // relación 1:1 con User
-  user User?
-}
-
-model User {
-  id        Int      @id @default(autoincrement())
-  name      String
-  type      UserType // natural o jurídica
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  // relación 1:1 con Auth
-  authId Int?  @unique
-  auth   Auth? @relation(fields: [authId], references: [id])
-}
-
+// ---------- ENUMS ----------
 enum UserType {
   NATURAL
   LEGAL
+}
+
+enum AuthProvider {
+  GOOGLE
+  CREDENTIALS
+}
+
+enum ListingType {
+  OFFER
+  REQUEST
+}
+
+enum TradeStatus {
+  PENDING
+  ACCEPTED
+  IN_TRANSIT
+  COMPLETED
+  CANCELED
+}
+
+enum TradeType {
+  EXCHANGE
+  MONEY
+  DONATION
+}
+
+enum Unit {
+  KG
+  TON
+  LITRE
+  UNIT
+  M3
+}
+
+enum CertificateType {
+  GREEN_COMPANY
+  SANITARY_APPROVED
+  FAIR_TRADE
+  OTHER
+}
+
+// ---------- AUTH ----------
+model Auth {
+  id         Int          @id @default(autoincrement())
+  provider   AuthProvider
+  providerId String?
+  email      String       @unique
+  password   String?
+  createdAt  DateTime     @default(now())
+  updatedAt  DateTime     @updatedAt
+
+  user User?
+}
+
+// ---------- USER ----------
+model User {
+  id        Int      @id @default(autoincrement())
+  name      String
+  type      UserType @default(NATURAL)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  authId Int?  @unique
+  auth   Auth? @relation(fields: [authId], references: [id])
+
+  phone    String? @db.VarChar(40)
+  whatsapp String? @db.VarChar(40)
+  email    String?
+
+  companies          Company[]
+  favoriteCategories Category[] @relation("UserFavoriteCategories")
+  listings           Listing[]
+
+  // reputación
+  reviewsWritten   Review[]           @relation("UserReviews")
+  reviewsReceived  Review[]           @relation("UserReviewsReceived")
+  Impact           Impact[]
+  CategoryProposal CategoryProposal[]
+  MaterialProposal MaterialProposal[]
+}
+
+// ---------- COMPANY ----------
+model Company {
+  id          Int      @id @default(autoincrement())
+  name        String
+  ruc         String?  @unique
+  description String?  @db.Text
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  ownerId Int
+  owner   User @relation(fields: [ownerId], references: [id])
+
+  phone    String? @db.VarChar(40)
+  whatsapp String? @db.VarChar(40)
+  email    String?
+
+  categories Category[] @relation("CompanyBusinessCategories")
+  listings   Listing[]
+
+  tradesAsBuyer  Trade[] @relation("BuyerCompany")
+  tradesAsSeller Trade[] @relation("SellerCompany")
+
+  // certificaciones
+  certificates CompanyCertificate[]
+
+  // reputación
+  reviews Review[]
+  Impact  Impact[]
+}
+
+// ---------- CATEGORY ----------
+model Category {
+  id        Int      @id @default(autoincrement())
+  name      String   @unique
+  slug      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  users            User[]             @relation("UserFavoriteCategories")
+  companies        Company[]          @relation("CompanyBusinessCategories")
+  materials        Material[]
+  MaterialProposal MaterialProposal[]
+}
+
+// ---------- MATERIAL ----------
+model Material {
+  id          Int     @id @default(autoincrement())
+  name        String
+  description String? @db.Text
+
+  categoryId Int
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  listings Listing[]
+}
+
+// ---------- LISTING (Publicaciones) ----------
+model Listing {
+  id                Int         @id @default(autoincrement())
+  type              ListingType
+  title             String
+  description       String?     @db.Text
+  quantity          Float
+  remainingQuantity Float // control de stock
+  unit              Unit
+  pricePerUnit      Float?
+  expiresAt         DateTime? // caducidad
+  createdAt         DateTime    @default(now())
+  updatedAt         DateTime    @updatedAt
+
+  materialId Int
+  material   Material @relation(fields: [materialId], references: [id])
+
+  userId Int
+  user   User @relation(fields: [userId], references: [id])
+
+  companyId Int?
+  company   Company? @relation(fields: [companyId], references: [id])
+
+  trades Trade[]
+
+  // ubicación
+  locationId Int?
+  location   Location? @relation(fields: [locationId], references: [id])
+}
+
+// ---------- TRADE (Intercambios) ----------
+model Trade {
+  id           Int         @id @default(autoincrement())
+  status       TradeStatus @default(PENDING)
+  type         TradeType   @default(EXCHANGE)
+  quantity     Float
+  unit         Unit
+  pricePerUnit Float?
+  notes        String?     @db.Text
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+
+  listingId Int
+  listing   Listing @relation(fields: [listingId], references: [id])
+
+  buyerId  Int
+  buyer    Company @relation("BuyerCompany", fields: [buyerId], references: [id])
+  sellerId Int
+  seller   Company @relation("SellerCompany", fields: [sellerId], references: [id])
+}
+
+// ---------- LOCATION (Ubicación detallada) ----------
+model Location {
+  id       Int     @id @default(autoincrement())
+  country  String?
+  region   String?
+  city     String?
+  district String?
+  address  String?
+  lat      Float?
+  lng      Float?
+
+  listings Listing[]
+}
+
+// ---------- REVIEW (Reputación) ----------
+model Review {
+  id        Int      @id @default(autoincrement())
+  rating    Int // 1 a 5
+  comment   String?  @db.Text
+  createdAt DateTime @default(now())
+
+  // autor de la reseña
+  reviewerId Int
+  reviewer   User @relation("UserReviews", fields: [reviewerId], references: [id])
+
+  // puede calificar a User o Company
+  userId    Int?
+  user      User?    @relation("UserReviewsReceived", fields: [userId], references: [id])
+  companyId Int?
+  company   Company? @relation(fields: [companyId], references: [id])
+}
+
+// ---------- CERTIFICATES ----------
+model CompanyCertificate {
+  id        Int             @id @default(autoincrement())
+  type      CertificateType
+  issuedBy  String? // entidad que emite
+  createdAt DateTime        @default(now())
+
+  companyId Int
+  company   Company @relation(fields: [companyId], references: [id])
+}
+
+// ---------- GAMIFICATION ----------
+model Impact {
+  id            Int      @id @default(autoincrement())
+  co2Saved      Float // en kg
+  wasteDiverted Float // en kg
+  createdAt     DateTime @default(now())
+
+  userId    Int?
+  user      User?    @relation(fields: [userId], references: [id])
+  companyId Int?
+  company   Company? @relation(fields: [companyId], references: [id])
+}
+
+// ---------- PROPOSED CATEGORIES / MATERIALS ----------
+model CategoryProposal {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  status      String   @default("PENDING") // PENDING, APPROVED, REJECTED
+  createdAt   DateTime @default(now())
+
+  proposedById Int
+  proposedBy   User @relation(fields: [proposedById], references: [id])
+}
+
+model MaterialProposal {
+  id          Int      @id @default(autoincrement())
+  name        String
+  description String?
+  status      String   @default("PENDING")
+  createdAt   DateTime @default(now())
+
+  categoryId Int?
+  category   Category? @relation(fields: [categoryId], references: [id])
+
+  proposedById Int
+  proposedBy   User @relation(fields: [proposedById], references: [id])
 }

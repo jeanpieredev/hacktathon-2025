@@ -8,6 +8,12 @@ importers:
 
   .:
     dependencies:
+      '@pothos/core':
+        specifier: ^4.9.1
+        version: 4.9.1(graphql@16.11.0)
+      '@pothos/plugin-prisma':
+        specifier: ^4.11.0
+        version: 4.11.0(@pothos/core@4.9.1(graphql@16.11.0))(@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2))(graphql@16.11.0)(typescript@5.9.2)
       '@prisma/client':
         specifier: ^6.16.2
         version: 6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2)
@@ -33,6 +39,9 @@ importers:
       '@types/bcryptjs':
         specifier: ^2.4.6
         version: 2.4.6
+      '@types/graphql':
+        specifier: ^14.5.0
+        version: 14.5.0
       '@types/jsonwebtoken':
         specifier: ^9.0.7
         version: 9.0.10
@@ -264,6 +273,20 @@ packages:
     resolution: {integrity: sha512-9I2Zn6+NJLfaGoz9jN3lpwDgAYvfGeNYdbAIjJOqzs4Tpc+VU3Jqq4IofSUBKajiDS8k9fZIg18/z13mpk1bsA==}
     engines: {node: '>=8'}
 
+  '@pothos/core@4.9.1':
+    resolution: {integrity: sha512-V+s/PeimifPkUSW+fo2SHNeLDX+WcPTscPmZ0xUFsPHEpZCE/cQvOpwXYTZer+kilymOLF+jiSkr+QRIPLi3+A==}
+    peerDependencies:
+      graphql: ^16.10.0
+
+  '@pothos/plugin-prisma@4.11.0':
+    resolution: {integrity: sha512-lnf46HO+9vDpVCNqlY51g298EUHOyTzOAUKShc5zjMIgg8vVV8l3Q8uyfe4CkNW/o0GFcyIsLbCC3qzTODoP0A==}
+    hasBin: true
+    peerDependencies:
+      '@pothos/core': '*'
+      '@prisma/client': '*'
+      graphql: ^16.10.0
+      typescript: '>=4.7.2'
+
   '@prisma/client@6.16.2':
     resolution: {integrity: sha512-E00PxBcalMfYO/TWnXobBVUai6eW/g5OsifWQsQDzJYm7yaY+IRLo7ZLsaefi0QkTpxfuhFcQ/w180i6kX3iJw==}
     engines: {node: '>=18.18'}
@@ -282,6 +305,9 @@ packages:
   '@prisma/debug@6.16.2':
     resolution: {integrity: sha512-bo4/gA/HVV6u8YK2uY6glhNsJ7r+k/i5iQ9ny/3q5bt9ijCj7WMPUwfTKPvtEgLP+/r26Z686ly11hhcLiQ8zA==}
 
+  '@prisma/dmmf@6.16.2':
+    resolution: {integrity: sha512-o9ztgdbj2KZXl6DL+oP56TTC0poTLPns9/MeU761b49E1IQ/fd0jwdov1bidlNOiwio8Nsou23xNrYE/db10aA==}
+
   '@prisma/engines-version@6.16.0-7.1c57fdcd7e44b29b9313256c76699e91c3ac3c43':
     resolution: {integrity: sha512-ThvlDaKIVrnrv97ujNFDYiQbeMQpLa0O86HFA2mNoip4mtFqM7U5GSz2ie1i2xByZtvPztJlNRgPsXGeM/kqAA==}
 
@@ -291,6 +317,12 @@ packages:
   '@prisma/fetch-engine@6.16.2':
     resolution: {integrity: sha512-wPnZ8DMRqpgzye758ZvfAMiNJRuYpz+rhgEBZi60ZqDIgOU2694oJxiuu3GKFeYeR/hXxso4/2oBC243t/whxQ==}
 
+  '@prisma/generator-helper@6.16.2':
+    resolution: {integrity: sha512-8tVnWM8ETJNrvI5CT9eKCW23+aPLNkidC+g9NJn7ghXm60Q7GGlLX5tmvn5dE8tXvs/FSX3MN7KNmNJpOr89Hw==}
+
+  '@prisma/generator@6.16.2':
+    resolution: {integrity: sha512-7bwRmtMIgfe1rUynh1p9VlmYvEiidbRO6aBphPBS6YGEGSvNe8+QExbRpsqFlFBvIX76BhZCxuEj7ZwALMYRKQ==}
+
   '@prisma/get-platform@6.16.2':
     resolution: {integrity: sha512-U/P36Uke5wS7r1+omtAgJpEB94tlT4SdlgaeTc6HVTTT93pXj7zZ+B/cZnmnvjcNPfWddgoDx8RLjmQwqGDYyA==}
 
@@ -299,6 +331,10 @@ packages:
 
   '@types/bcryptjs@2.4.6':
     resolution: {integrity: sha512-9xlo6R2qDs5uixm0bcIqCeMCE6HiQsIyel9KQySStiyqNl2tnj2mP3DX1Nf56MD6KMenNNlBBsy3LJ7gUEQPXQ==}
+
+  '@types/graphql@14.5.0':
+    resolution: {integrity: sha512-MOkzsEp1Jk5bXuAsHsUi6BVv0zCO+7/2PTiZMXWDSsMXvNU6w/PLMQT2vHn8hy2i0JqojPz1Sz6rsFjHtsU0lA==}
+    deprecated: This is a stub types definition. graphql provides its own type definitions, so you do not need this installed.
 
   '@types/jsonwebtoken@9.0.10':
     resolution: {integrity: sha512-asx5hIG9Qmf/1oStypjanR7iKTv0gXQ1Ov/jfrX6kS/EO0OFni8orbmGCn0672NHR3kXHwpAwR+B368ZGN/2rA==}
@@ -1098,6 +1134,18 @@ snapshots:
 
   '@lukeed/ms@2.0.2': {}
 
+  '@pothos/core@4.9.1(graphql@16.11.0)':
+    dependencies:
+      graphql: 16.11.0
+
+  '@pothos/plugin-prisma@4.11.0(@pothos/core@4.9.1(graphql@16.11.0))(@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2))(graphql@16.11.0)(typescript@5.9.2)':
+    dependencies:
+      '@pothos/core': 4.9.1(graphql@16.11.0)
+      '@prisma/client': 6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2)
+      '@prisma/generator-helper': 6.16.2
+      graphql: 16.11.0
+      typescript: 5.9.2
+
   '@prisma/client@6.16.2(prisma@6.16.2(typescript@5.9.2))(typescript@5.9.2)':
     optionalDependencies:
       prisma: 6.16.2(typescript@5.9.2)
@@ -1114,6 +1162,8 @@ snapshots:
 
   '@prisma/debug@6.16.2': {}
 
+  '@prisma/dmmf@6.16.2': {}
+
   '@prisma/engines-version@6.16.0-7.1c57fdcd7e44b29b9313256c76699e91c3ac3c43': {}
 
   '@prisma/engines@6.16.2':
@@ -1129,6 +1179,14 @@ snapshots:
       '@prisma/engines-version': 6.16.0-7.1c57fdcd7e44b29b9313256c76699e91c3ac3c43
       '@prisma/get-platform': 6.16.2
 
+  '@prisma/generator-helper@6.16.2':
+    dependencies:
+      '@prisma/debug': 6.16.2
+      '@prisma/dmmf': 6.16.2
+      '@prisma/generator': 6.16.2
+
+  '@prisma/generator@6.16.2': {}
+
   '@prisma/get-platform@6.16.2':
     dependencies:
       '@prisma/debug': 6.16.2
@@ -1136,6 +1194,10 @@ snapshots:
   '@standard-schema/spec@1.0.0': {}
 
   '@types/bcryptjs@2.4.6': {}
+
+  '@types/graphql@14.5.0':
+    dependencies:
+      graphql: 16.11.0
 
   '@types/jsonwebtoken@9.0.10':
     dependencies:

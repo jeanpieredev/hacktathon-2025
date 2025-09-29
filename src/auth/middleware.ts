@@ -1,6 +1,12 @@
 import { AuthUtils } from './utils';
-import { db } from '../db/config';
-import type { Context } from '../models/users/types';
+import { PrismaClient } from '@prisma/client';
+
+const prisma = new PrismaClient();
+
+// Define el tipo de contexto de auth
+export type AuthContext = {
+  user?: any; // Puedes tipar esto mejor después
+};
 
 /**
  * Authentication middleware for GraphQL context
@@ -8,8 +14,8 @@ import type { Context } from '../models/users/types';
 export async function createAuthContext(
   request: any,
   reply: any
-): Promise<Context> {
-  const context: Context = {};
+): Promise<AuthContext> {
+  const context: AuthContext = {};
 
   try {
     // Extract token from Authorization header
@@ -24,7 +30,7 @@ export async function createAuthContext(
     const decoded = AuthUtils.verifyToken(token);
 
     // Get user from database
-    const user = await db.user.findUnique({
+    const user = await prisma.user.findUnique({
       where: { id: decoded.userId },
       include: { auth: true },
     });
